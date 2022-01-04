@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/docopt/docopt.cpp.git
+	branch = master
+	commit = 6f5de76970be94a6f1e4556d1716593100e285d2
+	parent = 3cc37d0e8a5ac5a13c90958ed4fcb0a1b6338181
+	method = merge
+	cmdver = 0.4.3
