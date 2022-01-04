@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/macosforge/alac.git
+	branch = master
+	commit = c38887c5c5e64a4b31108733bd79ca9b2496d987
+	parent = 5249010ce0b7194283be7e7ed09cc440f27d2aee
+	method = merge
+	cmdver = 0.4.3
