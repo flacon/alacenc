@@ -27,6 +27,7 @@
 #include "types.h"
 #include <iostream>
 #include <array>
+#include <cstring>
 
 static const char *WAV_RIFF = "RIFF";
 static const char *WAV_WAVE = "WAVE";
@@ -303,7 +304,7 @@ class Guid : public std::array<char, 16>
 public:
     static constexpr int SIZE = 16;
     Guid() :
-        std::array<char, SIZE>({ '\0' }) { }
+        std::array<char, SIZE>({ '\0' }) {}
 
     inline void load(std::istream *stream) { return mustRead(stream, this->data(), this->size()); }
     inline bool operator==(const char *str) const { return strncmp(data(), str, size()) == 0; }

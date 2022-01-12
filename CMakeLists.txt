@@ -20,6 +20,9 @@ LIST(APPEND SOURCES
 
     encoder.h
     encoder.cpp
+
+    atoms.h
+    atoms.cpp
 )
 
 
@@ -33,6 +36,7 @@ include(vendor/module.cmake)
 link_directories(${CMAKE_BINARY_DIR}/lib)
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} alac)
+add_dependencies(${PROJECT_NAME} libalac)
 
 
 

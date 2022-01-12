@@ -1184,7 +1184,7 @@ int32_t ALACEncoder::Finish()
 /*
 	GetConfig()
 */
-void ALACEncoder::GetConfig( ALACSpecificConfig & config )
+void ALACEncoder::GetConfig( ALACSpecificConfig & config ) const
 {
 	config.frameLength			= Swap32NtoB(mFrameSize);
 	config.compatibleVersion	= (uint8_t) kALACCompatibleVersion;
@@ -1199,7 +1199,7 @@ void ALACEncoder::GetConfig( ALACSpecificConfig & config )
 	config.sampleRate			= Swap32NtoB(mOutputSampleRate);
 }
 
-uint32_t ALACEncoder::GetMagicCookieSize(uint32_t inNumChannels)
+uint32_t ALACEncoder::GetMagicCookieSize(uint32_t inNumChannels) const
 {
     if (inNumChannels > 2)
     {
@@ -1211,7 +1211,7 @@ uint32_t ALACEncoder::GetMagicCookieSize(uint32_t inNumChannels)
     }
 }
 
-void ALACEncoder::GetMagicCookie(void * outCookie, uint32_t * ioSize)
+void ALACEncoder::GetMagicCookie(void * outCookie, uint32_t * ioSize) const
 {
     ALACSpecificConfig theConfig = {0};
     ALACAudioChannelLayout theChannelLayout = {0};

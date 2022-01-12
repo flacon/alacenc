@@ -46,9 +46,9 @@ class ALACEncoder
 		// this must be called *before* InitializeEncoder()
 		void				SetFrameSize( uint32_t frameSize ) { mFrameSize = frameSize; };
 
-		void				GetConfig( ALACSpecificConfig & config );
-        uint32_t            GetMagicCookieSize(uint32_t inNumChannels);
-        void				GetMagicCookie( void * config, uint32_t * ioSize ); 
+		void				GetConfig( ALACSpecificConfig & config ) const;
+        uint32_t            GetMagicCookieSize(uint32_t inNumChannels) const;
+        void				GetMagicCookie( void * config, uint32_t * ioSize ) const;
 
         virtual int32_t	InitializeEncoder(AudioFormatDescription theOutputFormat);
 
