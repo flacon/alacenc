@@ -11,13 +11,17 @@ Usage:
   alacenc [options] <INPUT_FILE> <OUTPUT_FILE>
 
 Arguments:
-  INPUT_FILE    Input file name, when INPUT_FILE is -, read standard input
-  OUTPUT_FILE   Output ALAC file name, when OUTPUT_FILE is -, write to standard output
+  INPUT_FILE        Input file name,
+                    when INPUT_FILE is -, read standard input
+  OUTPUT_FILE       Output ALAC file name,
+                    when OUTPUT_FILE is -, write to standard output
 
 Options:
-  -q, --quiet   Produce no output to stderr
-  -h, --help     Print this help text and exit
-  -V, --version  Print the version number
+  -q, --quiet       Produce no output to stderr
+  -h, --help        Print this help text and exit
+  -V, --version     Print the version number
+  -f, --fast        Fast mode. Encode a channel pair without
+                    the search loop for maximum possible speed
 
 )";
 
@@ -29,6 +33,7 @@ int main(int argc, const char **argv)
     options.inFile       = args.at("<INPUT_FILE>").asString();
     options.outFile      = args.at("<OUTPUT_FILE>").asString();
     options.showProgress = !args.at("--quiet").asBool();
+    options.fastMode     = args.at("--fast").asBool();
 
     try {
         Encoder enc(options);

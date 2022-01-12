@@ -18,16 +18,14 @@ public:
         std::string outFile;
 
         bool showProgress = true;
+        bool fastMode     = false;
     };
 
-    // static void run(const Options &options) noexcept(false);
-
     explicit Encoder(const Options &options) noexcept(false);
-    // virtual ~Encoder();
-
-    Options options() const { return mOptions; }
 
     void run();
+
+    Options options() const { return mOptions; }
 
     const std::vector<uint32_t> &sampleSizeTable() const { return mSampleSizeTable; }
 
@@ -43,13 +41,12 @@ public:
 private:
     const Options                 mOptions;
     std::shared_ptr<std::istream> mInFile;
-    // std::shared_ptr<std::ostream> mOutFile;
-    WavHeader              mWavHeader;
-    AudioFormatDescription mInFormat;
-    AudioFormatDescription mOutFormat;
-    ALACEncoder            mEncoder;
-    std::vector<uint32_t>  mSampleSizeTable;
-    uint32_t               mAudioDataStartPos = 0;
+    WavHeader                     mWavHeader;
+    AudioFormatDescription        mInFormat;
+    AudioFormatDescription        mOutFormat;
+    ALACEncoder                   mEncoder;
+    std::vector<uint32_t>         mSampleSizeTable;
+    uint32_t                      mAudioDataStartPos = 0;
 
     void initInFormat();
     void initOutFormat();

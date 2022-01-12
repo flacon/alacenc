@@ -470,12 +470,6 @@ DrefAtom::DrefAtom(const Encoder &)
 StblAtom::StblAtom(const Encoder &encoder)
 {
     typeId = "stbl";
-    //subAtoms << FakeAtom_stsd(encoder);
-    //subAtoms << FakeAtom_stsc(encoder);
-    //subAtoms << FakeAtom_stco(encoder);
-    //subAtoms << FakeAtom_stsz(encoder);
-    //subAtoms << FakeAtom_stts(encoder);
-
     subAtoms << StsdAtom(encoder);
     subAtoms << StscAtom(encoder);
     subAtoms << StcoAtom(encoder);
