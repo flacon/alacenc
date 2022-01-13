@@ -108,15 +108,19 @@ MvhdAtom::MvhdAtom(const Encoder &encoder)
     data << uint32_t(0);
 
     // Modification time
-    // A 32-bit integer that specifies the calendar date and time (in seconds since midnight, January 1, 1904) when the movie atom was changed. BooleanIt is strongly recommended that this value should be specified using coordinated universal time (UTC).
+    // A 32-bit integer that specifies the calendar date and time (in seconds since midnight, January 1, 1904) when the movie atom was changed.
+    // BooleanIt is strongly recommended that this value should be specified using coordinated universal time (UTC).
     data << uint32_t(0);
 
     // Time scale
-    // A time value that indicates the time scale for this movie—that is, the number of time units that pass per second in its time coordinate system. A time coordinate system that measures time in sixtieths of a second, for example, has a time scale of 60.
+    // A time value that indicates the time scale for this movie—that is,
+    // the number of time units that pass per second in its time coordinate system.
+    // A time coordinate system that measures time in sixtieths of a second, for example, has a time scale of 60.
     data << uint32_t(1000); // header.sampleRate());
 
     // Duration
-    // A time value that indicates the duration of the movie in time scale units. Note that this property is derived from the movie’s tracks.
+    // A time value that indicates the duration of the movie in time scale units.
+    // Note that this property is derived from the movie’s tracks.
     // The value of this field corresponds to the duration of the longest track in the movie.
     data << uint32_t(std::ceil(encoder.inputWavHeader().dataSize() * 1000.0 / encoder.inputWavHeader().byteRate()));
 
@@ -133,7 +137,8 @@ MvhdAtom::MvhdAtom(const Encoder &encoder)
     data << '\0' << '\0' << '\0' << '\0' << '\0' << '\0' << '\0' << '\0' << '\0' << '\0';
 
     // Matrix structure
-    // The matrix structure associated with this movie. A matrix shows how to map points from one coordinate space into another. See Matrices for a discussion of how display matrices are used in QuickTime.
+    // The matrix structure associated with this movie. A matrix shows how to map points from one
+    // coordinate space into another. See Matrices for a discussion of how display matrices are used in QuickTime.
     data << uint32_t(0x00010000) << uint32_t(0x00000000) << uint32_t(0x00000000);
     data << uint32_t(0x00000000) << uint32_t(0x00010000) << uint32_t(0x00000000);
     data << uint32_t(0x00000000) << uint32_t(0x00000000) << uint32_t(0x40000000);
@@ -199,11 +204,15 @@ TkhdAtom::TkhdAtom(const Encoder &encoder)
     data << char(0) << uint16_t(Flag::Enabled | Flag::InMovie);
 
     // Creation time
-    // A 32-bit integer that indicates the calendar date and time (expressed in seconds since midnight, January 1, 1904) when the track header was created. It is strongly recommended that this value should be specified using coordinated universal time (UTC).
+    // A 32-bit integer that indicates the calendar date and time (expressed in seconds since midnight, January 1, 1904)
+    // when the track header was created.
+    // It is strongly recommended that this value should be specified using coordinated universal time (UTC).
     data << uint32_t(0);
 
     // Modification time
-    // A 32-bit integer that indicates the calendar date and time (expressed in seconds since midnight, January 1, 1904) when the track header was changed. It is strongly recommended that this value should be specified using coordinated universal time (UTC).
+    // A 32-bit integer that indicates the calendar date and time (expressed in seconds since midnight, January 1, 1904)
+    // when the track header was changed.
+    // It is strongly recommended that this value should be specified using coordinated universal time (UTC).
     data << uint32_t(0);
 
     // Track ID
@@ -215,7 +224,10 @@ TkhdAtom::TkhdAtom(const Encoder &encoder)
     data << uint32_t(0);
 
     // Duration
-    // A time value that indicates the duration of this track (in the movie’s time coordinate system). Note that this property is derived from the track’s edits. The value of this field is equal to the sum of the durations of all of the track’s edits. If there is no edit list, then the duration is the sum of the sample durations, converted into the movie timescale.
+    // A time value that indicates the duration of this track (in the movie’s time coordinate system).
+    // Note that this property is derived from the track’s edits.
+    // The value of this field is equal to the sum of the durations of all of the track’s edits.
+    // If there is no edit list, then the duration is the sum of the sample durations, converted into the movie timescale.
     data << uint32_t(encoder.inputWavHeader().duration());
 
     // Reserved
@@ -229,7 +241,10 @@ TkhdAtom::TkhdAtom(const Encoder &encoder)
     data << uint16_t(0);
 
     // Alternate group
-    // A 16-bit integer that identifies a collection of movie tracks that contain alternate data for one another. This same identifier appears in each 'tkhd' atom of the other tracks in the group. QuickTime chooses one track from the group to be used when the movie is played. The choice may be based on such considerations as playback quality, language, or the capabilities of the computer.
+    // A 16-bit integer that identifies a collection of movie tracks that contain alternate data for one another.
+    // This same identifier appears in each 'tkhd' atom of the other tracks in the group. QuickTime chooses one track
+    // from the group to be used when the movie is played.
+    // The choice may be based on such considerations as playback quality, language, or the capabilities of the computer.
     data << uint16_t(1);
 
     // Volume
@@ -282,11 +297,14 @@ MdhdAtom::MdhdAtom(const Encoder &encoder)
     data << '\0' << '\0' << '\0';
 
     // Creation time
-    // A 32-bit integer that specifies (in seconds since midnight, January 1, 1904) when the media atom was created. It is strongly recommended that this value should be specified using coordinated universal time (UTC).
+    // A 32-bit integer that specifies (in seconds since midnight, January 1, 1904)
+    // when the media atom was created. It is strongly recommended that this value
+    // should be specified using coordinated universal time (UTC).
     data << uint32_t(0);
 
     // Modification time
-    // A 32-bit integer that specifies (in seconds since midnight, January 1, 1904) when the media atom was changed. It is strongly recommended that this value should be specified using coordinated universal time (UTC).
+    // A 32-bit integer that specifies (in seconds since midnight, January 1, 1904) when the media atom was changed.
+    // It is strongly recommended that this value should be specified using coordinated universal time (UTC).
     data << uint32_t(0);
 
     // Time scale
@@ -388,7 +406,9 @@ SmhdAtom::SmhdAtom(const Encoder &)
     data << '\0' << '\0' << '\0';
 
     // Balance
-    // A 16-bit integer that specifies the sound balance of this sound media. Sound balance is the setting that controls the mix of sound between the two speakers of a computer. This field is normally set to 0. See Balance for more information about balance values.
+    // A 16-bit integer that specifies the sound balance of this sound media.
+    // Sound balance is the setting that controls the mix of sound between the
+    // two speakers of a computer. This field is normally set to 0. See Balance for more information about balance values.
     data << uint16_t(0);
 
     // Reserved
@@ -566,15 +586,19 @@ StsdAtom::StsdAtom(const Encoder &encoder)
     data << uint32_t(0);
 
     // Number of channels
-    // A 16-bit integer that indicates the number of sound channels used by the sound sample. Set to 1 for monaural sounds, 2 for stereo sounds. Higher numbers of channels are not supported.
+    // A 16-bit integer that indicates the number of sound channels used by the sound sample.
+    // Set to 1 for monaural sounds, 2 for stereo sounds. Higher numbers of channels are not supported.
     data << uint16_t(encoder.inputWavHeader().numChannels());
 
     // Sample size (bits)
-    // A 16-bit integer that specifies the number of bits in each uncompressed sound sample. Allowable values are 8 or 16. Formats using more than 16 bits per sample set this field to 16 and use sound description version 1.
+    // A 16-bit integer that specifies the number of bits in each uncompressed sound sample.
+    // Allowable values are 8 or 16.
+    // Formats using more than 16 bits per sample set this field to 16 and use sound description version 1.
     data << uint16_t(encoder.inputWavHeader().bitsPerSample());
 
     // Compression ID
-    // A 16-bit integer that must be set to 0 for version 0 sound descriptions. This may be set to –2 for some version 1 sound descriptions; see Redefined Sample Tables.
+    // A 16-bit integer that must be set to 0 for version 0 sound descriptions.
+    // This may be set to –2 for some version 1 sound descriptions; see Redefined Sample Tables.
     data << uint16_t(0);
 
     // Packet size
@@ -582,7 +606,10 @@ StsdAtom::StsdAtom(const Encoder &encoder)
     data << uint16_t(0);
 
     // Sample rate
-    // A 32-bit unsigned fixed-point number (16.16) that indicates the rate at which the sound samples were obtained. The integer portion of this number should match the media’s time scale. Many older version 0 files have values of 22254.5454 or 11127.2727, but most files have integer values, such as 44100. Sample rates greater than 2^16 are not supported.
+    // A 32-bit unsigned fixed-point number (16.16) that indicates the rate at which the sound samples were obtained.
+    // The integer portion of this number should match the media’s time scale.
+    // Many older version 0 files have values of 22254.5454 or 11127.2727, but most files have integer values,
+    // such as 44100. Sample rates greater than 2^16 are not supported.
     data << uint32_t(encoder.inputWavHeader().sampleRate() << 16);
 
     // ------------------------------------------
@@ -712,7 +739,6 @@ SttsAtom::SttsAtom(const Encoder &encoder)
     // A 3-byte space for sample description flags. Set this field to 0.
     data << '\0' << '\0' << '\0';
 
-    // uint32_t total = encoder.inputWavHeader().dataSize() / encoder.inFormat().mChannelsPerFrame / (encoder.inFormat().mBitsPerChannel / 8);
     uint32_t full = encoder.sampleSize() / encoder.inFormat().mChannelsPerFrame / (encoder.inFormat().mBitsPerChannel / 8);
     uint32_t last = (encoder.inputWavHeader().dataSize() / encoder.inFormat().mChannelsPerFrame / (encoder.inFormat().mBitsPerChannel / 8)) - full * (encoder.sampleSizeTable().size() - 1);
 
@@ -737,11 +763,4 @@ SttsAtom::SttsAtom(const Encoder &encoder)
         data << uint32_t(encoder.sampleSizeTable().size());
         data << uint32_t(full);
     }
-    // uint32_t rest = encoder.inputWavHeader().duration() - (full * 1000);
-    // std::cerr << "duration:" << encoder.inputWavHeader().duration() << std::endl;
-    // std::cerr << "count:" << encoder.sampleSizeTable().size() << std::endl;
-    // std::cerr << std::hex << " FULL:" << full << " LAST:" << last << std::endl;
-    // Number of entries
-    // if (rest = 0) {
-    //    data << uint32_t(1);
 }
