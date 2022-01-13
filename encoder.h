@@ -39,18 +39,17 @@ public:
     AudioFormatDescription inFormat() const { return mInFormat; }
 
 private:
-    const Options                 mOptions;
-    std::shared_ptr<std::istream> mInFile;
-    WavHeader                     mWavHeader;
-    AudioFormatDescription        mInFormat;
-    AudioFormatDescription        mOutFormat;
-    ALACEncoder                   mEncoder;
-    std::vector<uint32_t>         mSampleSizeTable;
-    uint32_t                      mAudioDataStartPos = 0;
+    const Options          mOptions;
+    WavHeader              mWavHeader;
+    AudioFormatDescription mInFormat;
+    AudioFormatDescription mOutFormat;
+    ALACEncoder            mEncoder;
+    std::vector<uint32_t>  mSampleSizeTable;
+    uint32_t               mAudioDataStartPos = 0;
 
     void initInFormat();
     void initOutFormat();
-    void writeAudioData(std::istream *in, OutFile &out);
+    void writeAudioData(std::istream &in, OutFile &out);
 };
 
 #endif // ENCODER_H

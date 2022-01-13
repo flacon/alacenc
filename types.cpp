@@ -67,6 +67,9 @@ Bytes &operator<<(Bytes &out, const std::string &value)
     return out;
 }
 
+/************************************************
+ * OutFile
+ ************************************************/
 OutFile::OutFile() :
     mStream(std::cout)
 {

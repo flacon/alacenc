@@ -42,10 +42,10 @@ class OutFile
 public:
     OutFile();
     explicit OutFile(const std::string &fileName);
-    // virtual ~OutFile();
 
     uint32_t tellp() const { return mPos; }
     bool     good() const { return mStream.good(); }
+    bool     fail() const { return mStream.fail(); }
     void     flush();
 
     OutFile &operator<<(char value);
