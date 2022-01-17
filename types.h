@@ -42,10 +42,10 @@ class OutFile
 public:
     OutFile();
     explicit OutFile(const std::string &fileName);
+    // virtual ~OutFile();
 
     uint32_t tellp() const { return mPos; }
     bool     good() const { return mStream.good(); }
-    bool     fail() const { return mStream.fail(); }
     void     flush();
 
     OutFile &operator<<(char value);
@@ -63,5 +63,7 @@ private:
     std::ostream &mStream;
     uint32_t      mPos = 0;
 };
+
+bool iequals(const std::string &a, const std::string &b);
 
 #endif // TYPES_H

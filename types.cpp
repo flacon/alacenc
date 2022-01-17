@@ -67,9 +67,6 @@ Bytes &operator<<(Bytes &out, const std::string &value)
     return out;
 }
 
-/************************************************
- * OutFile
- ************************************************/
 OutFile::OutFile() :
     mStream(std::cout)
 {
@@ -163,4 +160,13 @@ void OutFile::write(unsigned char *data, std::streamsize size)
 {
     mStream.write((char *)(data), size);
     mPos += size;
+}
+
+bool iequals(const std::string &a, const std::string &b)
+{
+    return std::equal(a.begin(), a.end(),
+                      b.begin(), b.end(),
+                      [](char a, char b) {
+                          return tolower(a) == tolower(b);
+                      });
 }

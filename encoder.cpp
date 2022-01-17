@@ -9,12 +9,21 @@
 
 struct noop
 {
-    void operator()(...) const {}
+    void operator()(...) const { }
 };
 
 Encoder::Encoder(const Options &options) noexcept(false) :
     mOptions(options)
 {
+    if (mOptions.inFile == "-") {
+        mInFile.reset(&std::cin, noop());
+    }
+    else {
+        mInFile.reset(new std::ifstream(mOptions.inFile.c_str()));
+        if (mInFile->fail()) {
+            throw Error(mOptions.inFile + ": " + strerror(errno));
+        }
+    }
 }
 
 void Encoder::initInFormat()
@@ -62,18 +71,8 @@ void Encoder::initOutFormat()
 
 void Encoder::run()
 {
-    std::ifstream inFile(mOptions.inFile);
-    std::istream &in = mOptions.inFile == "-" ? std::cin : inFile;
-    if (in.fail()) {
-        throw Error(mOptions.inFile + ": " + strerror(errno));
-    }
-
     OutFile out = mOptions.outFile == "-" ? OutFile() : OutFile(mOptions.outFile);
-    if (out.fail()) {
-        throw Error(mOptions.outFile + ": " + strerror(errno));
-    }
-
-    mWavHeader = WavHeader(&in);
+    mWavHeader  = WavHeader(mInFile.get());
     initInFormat();
     initOutFormat();
 
@@ -83,7 +82,7 @@ void Encoder::run()
 
     out << FtypAtom();
     out << FreeAtom(8);
-    writeAudioData(in, out);
+    writeAudioData(mInFile.get(), out);
     out << MoovAtom(*this);
     out.flush();
 }
@@ -103,31 +102,12 @@ uint32_t Encoder::sampleSize() const
     return mInFormat.mChannelsPerFrame * (mInFormat.mBitsPerChannel / 8) * mOutFormat.mFramesPerPacket;
 }
 
-struct ProgressBar
+void Encoder::setTags(const Tags &value)
 {
-public:
-    uint64_t    total = 0;
-    std::string file;
+    mTags = value;
+}
 
-    void printDone()
-    {
-        fprintf(stderr, "\r%s    Done\n", file.c_str());
-    }
-
-    void print(uint64_t done)
-    {
-        int p = done * 100.0 / total;
-        if (p > mLastPercent) {
-            fprintf(stderr, "\r%s   %3d%% ", file.c_str(), p);
-            mLastPercent = p;
-        }
-    }
-
-private:
-    int mLastPercent = -1;
-};
-
-void Encoder::writeAudioData(std::istream &in, OutFile &out)
+void Encoder::writeAudioData(std::istream *in, OutFile &out)
 {
     const int32_t inBufSize = sampleSize();
     mSampleSizeTable.reserve(mWavHeader.dataSize() / inBufSize);
@@ -136,25 +116,27 @@ void Encoder::writeAudioData(std::istream &in, OutFile &out)
 
     std::list<std::vector<unsigned char>> data;
 
-    uint32_t    outDataSize = 0;
-    uint64_t    total       = mWavHeader.dataSize();
-    uint64_t    remained    = total;
-    ProgressBar progressBar;
-    progressBar.total = total;
-    progressBar.file  = mOptions.inFile;
+    uint32_t outDataSize = 0;
+    uint64_t total       = mWavHeader.dataSize();
+    uint64_t remained    = total;
+    int      percent     = 0;
 
     while (remained > 0) {
-        if (!in.good()) {
+        if (!in->good()) {
             throw Error(mOptions.inFile + ": " + strerror(errno));
         }
 
         if (mOptions.showProgress) {
-            progressBar.print(total - remained);
+            int p = (total - remained) * 100.0 / total;
+            if (p > percent) {
+                fprintf(stderr, "%d%%\r", p);
+                percent = p;
+            }
         }
 
         int32_t size = std::min(uint64_t(inBufSize), remained);
 
-        in.read(inBuf, size);
+        in->read(inBuf, size);
         remained -= size;
 
         std::vector<unsigned char> outBuf(outBufSize);
@@ -174,9 +156,5 @@ void Encoder::writeAudioData(std::istream &in, OutFile &out)
 
     for (auto chunk : data) {
         out.write(chunk.data(), chunk.size());
-    }
-
-    if (mOptions.showProgress) {
-        progressBar.printDone();
     }
 }

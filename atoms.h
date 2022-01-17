@@ -61,6 +61,9 @@ struct StscAtom : public Atom { StscAtom(const Encoder &encoder); };
 struct StcoAtom : public Atom { StcoAtom(const Encoder &encoder); };
 struct StszAtom : public Atom { StszAtom(const Encoder &encoder); };
 struct SttsAtom : public Atom { SttsAtom(const Encoder &encoder); };
+struct UdtaAtom : public Atom { UdtaAtom(const Encoder &encoder); };
+struct MetaAtom : public Atom { MetaAtom(const Encoder &encoder); };
+//struct MetaHdlrAtom : public Atom { MetaHdlrAtom(const Encoder &encoder); };
 
 // clang-format on
 

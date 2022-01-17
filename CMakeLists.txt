@@ -23,6 +23,9 @@ LIST(APPEND SOURCES
 
     atoms.h
     atoms.cpp
+
+    tags.h
+    tags.cpp
 )
 
 

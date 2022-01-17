@@ -8,6 +8,7 @@
 #include "wavheader.h"
 #include "vendor/alac/codec/ALACAudioTypes.h"
 #include "vendor/alac/codec/ALACEncoder.h"
+#include "tags.h"
 
 class Encoder
 {
@@ -38,18 +39,23 @@ public:
 
     AudioFormatDescription inFormat() const { return mInFormat; }
 
+    const Tags &tags() const { return mTags; }
+    void        setTags(const Tags &value);
+
 private:
-    const Options          mOptions;
-    WavHeader              mWavHeader;
-    AudioFormatDescription mInFormat;
-    AudioFormatDescription mOutFormat;
-    ALACEncoder            mEncoder;
-    std::vector<uint32_t>  mSampleSizeTable;
-    uint32_t               mAudioDataStartPos = 0;
+    const Options                 mOptions;
+    std::shared_ptr<std::istream> mInFile;
+    WavHeader                     mWavHeader;
+    AudioFormatDescription        mInFormat;
+    AudioFormatDescription        mOutFormat;
+    ALACEncoder                   mEncoder;
+    std::vector<uint32_t>         mSampleSizeTable;
+    uint32_t                      mAudioDataStartPos = 0;
+    Tags                          mTags;
 
     void initInFormat();
     void initOutFormat();
-    void writeAudioData(std::istream &in, OutFile &out);
+    void writeAudioData(std::istream *in, OutFile &out);
 };
 
 #endif // ENCODER_H
