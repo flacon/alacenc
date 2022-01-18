@@ -34,14 +34,13 @@ add_definitions(-DPROJECT_VERSION=\"${CMAKE_PROJECT_VERSION}\")
 add_definitions(-DPROJECT_DESCRIPTION=\"${PROJECT_DESCRIPTION}\")
 
 
-add_subdirectory(vendor/docopt)
+add_subdirectory(vendor/alac EXCLUDE_FROM_ALL)
+add_subdirectory(vendor/docopt EXCLUDE_FROM_ALL)
 
-include(vendor/module.cmake)
 
-link_directories(${CMAKE_BINARY_DIR}/lib)
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} alac docopt)
-add_dependencies(${PROJECT_NAME} libalac)
+target_link_libraries(${PROJECT_NAME} alac_s docopt_s)
 
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 
 
