@@ -253,9 +253,13 @@ public:
     uint16_t    genreNum() const { return mGenre; }
     void        setGenre(const std::string &value);
 
+    std::string coverFile() const { return mCoverFile; }
+    FileType    coverType() const { return mCoverType; }
+    void        setCoverFile(const std::string &value, FileType type);
+
     // Bytes asBytes() const;
     const std::map<std::string, std::string> &stringTags() const { return mStringTags; }
-    const std::map<std::string, bool> &       boolTags() const { return mBoolTags; }
+    const std::map<std::string, bool>        &boolTags() const { return mBoolTags; }
 
 private:
     int mTrackNum   = 0;
@@ -267,6 +271,8 @@ private:
     bool mCompilation = false;
     int  mGenre       = 0;
 
+    std::string                        mCoverFile;
+    FileType                           mCoverType = FileType::Unknown;
     std::map<std::string, std::string> mStringTags;
     std::map<std::string, bool>        mBoolTags;
 };

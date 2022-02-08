@@ -63,29 +63,47 @@ struct StszAtom : public Atom { StszAtom(const Encoder &encoder); };
 struct SttsAtom : public Atom { SttsAtom(const Encoder &encoder); };
 struct UdtaAtom : public Atom { UdtaAtom(const Encoder &encoder); };
 struct MetaAtom : public Atom { MetaAtom(const Encoder &encoder); };
-//struct MetaHdlrAtom : public Atom { MetaHdlrAtom(const Encoder &encoder); };
+struct CovrAtom : public Atom { CovrAtom(const Encoder &encoder); };
+struct TrknAtom : public Atom { TrknAtom(const Encoder &encoder); };
+struct DiskAtom : public Atom { DiskAtom(const Encoder &encoder); };
 
 // clang-format on
 
 /*
-moov    		movie atom                              SIZE: 268786  POS:     32
-+  • mvhd		movie header atom                       SIZE:    108  POS:     40      DATA 100 bytes
-+  ⊿ trak		track atoms                             SIZE:   9476  POS:    148
-+    • tkhd      	track header atom                       SIZE:     92  POS:    156      DATA 84 bytes
-+    ⊿ mdia      	media atom                              SIZE:   9376  POS:    248
-+      • mdhd    	media header atom                       SIZE:     32  POS:    256      DATA 24 bytes
-+      • hdlr    	handler reference                       SIZE:     36  POS:    288      DATA 28 bytes
-+      ⊿ minf    	media information                       SIZE:   9300  POS:    324
-+        • smhd  	Sound Media Information Header          SIZE:     16  POS:    332      DATA 8 bytes
-+        ⊿ dinf  	Data Information Atoms                  SIZE:     36  POS:    348
-+          • dref	Data Reference Atoms                    SIZE:     28  POS:    356      DATA 20 bytes
-         ⊿ stbl  	Sample Table Atoms                      SIZE:   9240  POS:    384
-+          • stsd	Sample Description Atoms                SIZE:     88  POS:    392      DATA 80 bytes
-           • stts	Time-to-Sample Atoms                    SIZE:     32  POS:    480      DATA 24 bytes
-           • stsc	Sample-to-Chunk Atoms                   SIZE:     40  POS:    512      DATA 32 bytes
-           • stsz	Sample Size Atoms                       SIZE:   7548  POS:    552      DATA 7540 bytes
-           • stco	Chunk Offset Atoms                      SIZE:   1524  POS:   8100      DATA 1516 bytes
-   ⊿ udta		user data atom                          SIZE: 259194  POS:   9624
-     ⊿ meta      	Timed Metadata Media                    SIZE: 259186  POS:   9632
+• ftyp  		file type atom                          SIZE:     28  POS:      8
+• free  		free space                              SIZE:      8  POS:     36
+• mdat  		DATA .............                      SIZE: 25433528  POS:     44
+⊿ moov  		movie atom                              SIZE:  29181  POS: 25433572
+  • mvhd		movie header atom                       SIZE:    108  POS: 25433580
+  ⊿ trak		track atoms                             SIZE:  10249  POS: 25433688
+    • tkhd      	track header atom                       SIZE:     92  POS: 25433696
+    ⊿ edts      	Edit Atom                               SIZE:     36  POS: 25433788
+      • elst    	Edit List Atom                          SIZE:     28  POS: 25433796
+    ⊿ mdia      	media atom                              SIZE:  10113  POS: 25433824
+      • mdhd    	media header atom                       SIZE:     32  POS: 25433832
+      • hdlr    	handler reference                       SIZE:     45  POS: 25433864
+      ⊿ minf    	media information                       SIZE:  10028  POS: 25433909
+        • smhd  	Sound Media Information Header          SIZE:     16  POS: 25433917
+        ⊿ dinf  	Data Information Atoms                  SIZE:     36  POS: 25433933
+          • dref	Data Reference Atoms                    SIZE:     28  POS: 25433941
+        ⊿ stbl  	Sample Table Atoms                      SIZE:   9968  POS: 25433969
+          • stsd	Sample Description Atoms                SIZE:     88  POS: 25433977
+          • stts	Time-to-Sample Atoms                    SIZE:     32  POS: 25434065
+          • stsc	Sample-to-Chunk Atoms                   SIZE:    268  POS: 25434097
+          • stsz	Sample Size Atoms                       SIZE:   9456  POS: 25434365
+          • stco	Chunk Offset Atoms                      SIZE:    116  POS: 25443821
+  ⊿ udta		user data atom                          SIZE:  18816  POS: 25443937
+    ⊿ meta      	Metadata                                SIZE:  18808  POS: 25443945
+      • hdlr    	handler reference                       SIZE:     33  POS: 25443957
+      ⊿ ilst    	Ilist                                   SIZE:  16953  POS: 25443990
+        • ©too  	                                        SIZE:     37  POS: 25443998
+        • covr  	                                        SIZE:  16670  POS: 25444035
+        • ©nam  	                                        SIZE:     40  POS: 25460705
+        • ©ART  	                                        SIZE:     36  POS: 25460745
+        • aART  	                                        SIZE:     46  POS: 25460781
+        • ©wrt  	                                        SIZE:     44  POS: 25460827
+        • ©alb  	                                        SIZE:     36  POS: 25460871
+        • ©grp  	                                        SIZE:     36  POS: 25460907
+      • free    	free space                              SIZE:   1810  POS: 25460943
 */
 #endif // ATOMS_H

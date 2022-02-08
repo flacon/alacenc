@@ -170,3 +170,55 @@ bool iequals(const std::string &a, const std::string &b)
                           return tolower(a) == tolower(b);
                       });
 }
+
+/************************************************
+ *  See https://en.wikipedia.org/wiki/List_of_file_signatures
+ ************************************************/
+FileType determineFileType(const std::string &fileName) noexcept(false)
+{
+    if (!std::filesystem::exists(fileName)) {
+        throw Error(fileName + ": File not found");
+    }
+
+    auto file = std::ifstream(fileName);
+    if (file.fail()) {
+        throw Error(fileName + ": " + strerror(errno));
+    }
+
+    char buf[12] = { 0 };
+    file.read(buf, 12);
+
+    if (strncmp(buf, "\xFF\xD8\xFF\xDB", 4) == 0) {
+        return FileType::JPEG;
+    }
+
+    if (strncmp(buf, "\xFF\xD8\xFF\xEE", 4) == 0) {
+        return FileType::JPEG;
+    }
+
+    if (strncmp(buf, "\xFF\xD8\xFF\xE0\x00\x10\x4A\x46\x49\x46\x00\x01", 12) == 0) {
+        return FileType::JPEG;
+    }
+
+    if (strncmp(buf, "\xFF\xD8\xFF\xE1", 4) == 0 && strncmp(buf + 6, "\x45\x78\x69\x66\x00\x00", 6)) {
+        return FileType::JPEG;
+    }
+
+    if (strncmp(buf, "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A", 4) == 0) {
+        return FileType::PNG;
+    }
+
+    if (strncmp(buf, "\x42\x4D", 2) == 0) {
+        return FileType::BMP;
+    }
+
+    if (strncmp(buf, "\x47\x49\x46\x38\x37\x61", 6) == 0) {
+        return FileType::GIF;
+    }
+
+    if (strncmp(buf, "\x47\x49\x46\x38\x39\x61", 6) == 0) {
+        return FileType::GIF;
+    }
+
+    throw Error(fileName + ": Unsupported file type");
+}

@@ -23,19 +23,20 @@ Options:
   -V --version             Print the version number
   -f --fast                Fast mode. Encode a channel pair without
                            the search loop for maximum possible speed
-  --artist <value>         Set artist name
-  --album <value>          Set album/performer name
-  --albumArtist <value>    Set album artist name
-  --title <value>          Set title/track name
-  --comment <value>        Set comment
-  --genre <value>          Set genre
-  --year <value>           Set year
-  --songWriter <value>     Set song writer name
-  --group <value>          Set group name
-  --lyrics <value>         Set lyrics
+  --artist=<value>         Set artist name
+  --album=<value>          Set album/performer name
+  --albumArtist=<value>    Set album artist name
+  --title=<value>          Set title/track name
+  --comment=<value>        Set comment
+  --genre=<value>          Set genre
+  --year=<value>           Set year
+  --songWriter=<value>     Set song writer name
+  --group=<value>          Set group name
+  --lyrics=<value>         Set lyrics
   --compilation            Set track as part of a compilation
-  --track <number/total>   Set track number
-  --disc <number/total>    Set disc number
+  --track=<number/total>   Set track number
+  --disc=<number/total>    Set disc number
+  --cover=<file>           Set disc cover from file. The program supports covers in JPEG, PNG and BMP formats.
 )";
 
 std::tuple<int, int> splitNums(const std::string &s)
@@ -74,6 +75,10 @@ static Tags parseTags(const docopt::Options &args)
     if (args.at("--lyrics").kind()      != docopt::Kind::Empty) { res.setLyrics(args.at("--lyrics").asString());            }
     if (args.at("--compilation").kind() != docopt::Kind::Empty) { res.setCompilation(args.at("--compilation").asBool());    }
     // clang-format on
+
+    if (args.at("--cover").kind() != docopt::Kind::Empty) {
+        res.setCoverFile(args.at("--cover").asString(), determineFileType(args.at("--cover").asString()));
+    }
 
     if (args.at("--track").kind() != docopt::Kind::Empty) {
         int n, t;

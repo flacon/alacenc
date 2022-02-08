@@ -66,4 +66,14 @@ private:
 
 bool iequals(const std::string &a, const std::string &b);
 
+enum class FileType {
+    Unknown = 0,
+    JPEG,
+    PNG,
+    BMP,
+    GIF,
+};
+
+FileType determineFileType(const std::string &fileName) noexcept(false);
+
 #endif // TYPES_H

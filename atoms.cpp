@@ -823,6 +823,42 @@ void addTag(Atom &out, const std::string &key, uint16_t value)
     out.data << uint16_t(value);                  // Value
 }
 
+struct DataAtom : public Atom
+{
+    DataAtom()
+    {
+        typeId = "data";
+    }
+};
+
+TrknAtom::TrknAtom(const Encoder &encoder)
+{
+    typeId = "trkn";
+
+    DataAtom dataAtom;
+    dataAtom.data << uint32_t(AtomDataType::Implicit); // Data type
+    dataAtom.data << uint32_t(0);                      // Language ?
+    dataAtom.data << uint16_t(0);
+    dataAtom.data << uint16_t(encoder.tags().trackNum());
+    dataAtom.data << uint16_t(encoder.tags().trackCount());
+    dataAtom.data << uint16_t(0);
+    subAtoms << dataAtom;
+}
+
+DiskAtom::DiskAtom(const Encoder &encoder)
+{
+    typeId = "disk";
+
+    DataAtom dataAtom;
+    dataAtom.data << uint32_t(AtomDataType::Implicit); // Data type
+    dataAtom.data << uint32_t(0);                      // Language ?
+    dataAtom.data << uint16_t(0);
+    dataAtom.data << uint16_t(encoder.tags().discNum());
+    dataAtom.data << uint16_t(encoder.tags().discCount());
+    dataAtom.data << uint16_t(0);
+    subAtoms << dataAtom;
+}
+
 MetaAtom::MetaAtom(const Encoder &encoder)
 {
     Atom ilst;
@@ -840,28 +876,16 @@ MetaAtom::MetaAtom(const Encoder &encoder)
     }
 
     if (encoder.tags().trackNum()) {
-        ilst.data << uint32_t(1 + 24);                 // Size
-        ilst.data << "trkn";                           // Tag key
-        ilst.data << uint32_t(1 + 16);                 // Size
-        ilst.data << "data";                           //
-        ilst.data << uint32_t(AtomDataType::Implicit); // Data type
-        ilst.data << uint32_t(0);                      // Language ?
-        ilst.data << uint16_t(0);
-        ilst.data << uint16_t(encoder.tags().trackNum());
-        ilst.data << uint16_t(encoder.tags().trackCount());
-        ilst.data << uint16_t(0);
+        ilst.data << TrknAtom(encoder);
     }
 
     if (encoder.tags().discNum()) {
-        ilst.data << uint32_t(1 + 24);                 // Size
-        ilst.data << "disk";                           // Tag key
-        ilst.data << uint32_t(1 + 16);                 // Size
-        ilst.data << "data";                           //
-        ilst.data << uint32_t(AtomDataType::Implicit); // Data type
-        ilst.data << uint32_t(0);                      // Language ?
-        ilst.data << uint16_t(0);
-        ilst.data << uint16_t(encoder.tags().discNum());
-        ilst.data << uint16_t(encoder.tags().discCount());
+        ilst.data << DiskAtom(encoder);
+    }
+
+    if (!encoder.tags().coverFile().empty()) {
+        CovrAtom covr(encoder);
+        ilst.data << covr;
     }
 
     // ................................
@@ -891,3 +915,39 @@ MetaAtom::MetaAtom(const Encoder &encoder)
 
     // subAtoms << FreeAtom(4 * 1024);
 }
+
+CovrAtom::CovrAtom(const Encoder &encoder)
+{
+    Atom dataAtom;
+    dataAtom.typeId = "data";
+
+    // clang-format off
+    switch (encoder.tags().coverType()) {
+        case FileType::JPEG: dataAtom.data << uint32_t(AtomDataType::JPEG); break;
+        case FileType::PNG:  dataAtom.data << uint32_t(AtomDataType::PNG);  break;
+        case FileType::BMP:  dataAtom.data << uint32_t(AtomDataType::BMP);  break;
+        case FileType::GIF:  dataAtom.data << uint32_t(AtomDataType::GIF);  break;
+        default:             throw Error(encoder.tags().coverFile() + ": Unsupported file type");
+    }
+    // clang-fornmat on
+    dataAtom.data << uint32_t(0); // I don't know what is
+
+    // Append file data ..................
+    auto file = std::ifstream(encoder.tags().coverFile(), std::ios::in | std::ios::binary);
+    if (file.fail()) {
+        throw Error(encoder.tags().coverFile() + ": " + strerror(errno));
+    }
+
+    file.seekg( 0, std::ios::end );
+    uint64_t size = file.tellg();
+    file.seekg( 0, std::ios::beg );
+
+    dataAtom.data.resize(size + 8);
+    file.read(dataAtom.data.data() + 8, size);
+
+    typeId = "covr";
+    subAtoms << dataAtom;
+}
+
+
+
