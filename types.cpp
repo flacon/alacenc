@@ -1,5 +1,7 @@
 #include "types.h"
 #include <iostream>
+#include <cstring>
+#include <filesystem>
 
 /************************************************
  * ALACEncoder::Bytes

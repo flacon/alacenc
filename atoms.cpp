@@ -6,6 +6,7 @@
 #include "encoder.h"
 #include <assert.h>
 #include <cmath>
+#include <cstring>
 
 // https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html
 
