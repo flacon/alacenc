@@ -59,10 +59,9 @@ enum
     kALAC_MemFullError         = -108
 };
 
-enum
-{
-    kALACFormatAppleLossless = 'alac',
-    kALACFormatLinearPCM = 'lpcm'
+enum {
+    kALACFormatAppleLossless = 'a' << 24 | 'l' << 16 | 'a' << 8 | 'c',
+    kALACFormatLinearPCM     = 'l' << 24 | 'p' << 16 | 'c' << 8 | 'm',
 };
 
 enum
@@ -149,12 +148,11 @@ typedef struct AudioFormatDescription  AudioFormatDescription;
 
 /* Lossless Definitions */
 
-enum
-{
-	kALACCodecFormat		= 'alac',
-	kALACVersion			= 0,
-	kALACCompatibleVersion	= kALACVersion,
-	kALACDefaultFrameSize	= 4096
+enum {
+    kALACCodecFormat       = 'a' << 24 | 'l' << 16 | 'a' << 8 | 'c',
+    kALACVersion           = 0,
+    kALACCompatibleVersion = kALACVersion,
+    kALACDefaultFrameSize  = 4096
 };
 
 // note: this struct is wrapped in an 'alac' atom in the sample description extension area
