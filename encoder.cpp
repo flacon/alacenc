@@ -111,8 +111,8 @@ void Encoder::writeAudioData(std::istream *in, OutFile &out)
 {
     const int32_t inBufSize = sampleSize();
     mSampleSizeTable.reserve(mWavHeader.dataSize() / inBufSize);
-    const int32_t outBufSize = inBufSize + kALACMaxEscapeHeaderBytes;
-    char          inBuf[inBufSize];
+    const int32_t     outBufSize = inBufSize + kALACMaxEscapeHeaderBytes;
+    std::vector<char> inBuf(inBufSize);
 
     std::list<std::vector<unsigned char>> data;
 
@@ -136,12 +136,12 @@ void Encoder::writeAudioData(std::istream *in, OutFile &out)
 
         int32_t size = std::min(uint64_t(inBufSize), remained);
 
-        in->read(inBuf, size);
+        in->read(inBuf.data(), size);
         remained -= size;
 
         std::vector<unsigned char> outBuf(outBufSize);
 
-        mEncoder.Encode(mInFormat, mOutFormat, (unsigned char *)inBuf, (unsigned char *)outBuf.data(), &size);
+        mEncoder.Encode(mInFormat, mOutFormat, (unsigned char *)inBuf.data(), (unsigned char *)outBuf.data(), &size);
 
         outBuf.resize(size);
         data.push_back(std::move(outBuf));

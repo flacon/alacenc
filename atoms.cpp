@@ -797,7 +797,7 @@ void addTag(Atom &out, const std::string &key, const std::string &value)
     out.data << uint32_t(AtomDataType::UTF8);  // Data type
     out.data << uint32_t(0);                   // Language ?
     out.data << value;                         // Tag value
-};
+}
 
 void addTag(Atom &out, const std::string &key, bool value)
 {

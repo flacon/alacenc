@@ -269,7 +269,7 @@ static inline int32_t dyn_get_32bit( uint8_t * in, uint32_t * bitPos, int32_t m,
 	return result;
 }
 
-int32_t dyn_decomp( AGParamRecPtr params, BitBuffer * bitstream, int32_t * pc, int32_t numSamples, int32_t maxSize, uint32_t * outNumBits )
+int32_t dyn_decomp( AGParamRecPtr params, BitBuffer * bitstream, int32_t * pc, uint32_t numSamples, int32_t maxSize, uint32_t * outNumBits )
 {
     uint8_t 	*in;
     int32_t	*outPtr = pc;

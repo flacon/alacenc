@@ -255,18 +255,18 @@ ALACEncoder::~ALACEncoder()
 */
 int32_t ALACEncoder::EncodeStereo(BitBuffer *bitstream, void *inputBuffer, uint32_t stride, uint32_t channelIndex, uint32_t numSamples)
 {
-    BitBuffer   workBits;
-    BitBuffer   startBits = *bitstream; // squirrel away copy of current state in case we need to go back and do an escape packet
-    AGParamRec  agParams;
-    uint32_t    bits1, bits2;
-    uint32_t    dilate;
-    int32_t     mixBits, mixRes, maxRes;
-    uint32_t    minBits, minBits1, minBits2;
-    uint32_t    numU, numV;
-    uint32_t    mode;
-    uint32_t    pbFactor;
-    uint32_t    chanBits;
-    uint32_t    denShift;
+    BitBuffer  workBits;
+    BitBuffer  startBits = *bitstream; // squirrel away copy of current state in case we need to go back and do an escape packet
+    AGParamRec agParams;
+    uint32_t   bits1, bits2;
+    uint32_t   dilate;
+    int32_t    mixBits, mixRes, maxRes;
+    uint32_t   minBits, minBits1, minBits2;
+    uint32_t   numU, numV;
+    uint32_t   mode;
+    uint32_t   pbFactor;
+    uint32_t   chanBits;
+    // uint32_t    denShift;
     uint8_t     bytesShifted;
     SearchCoefs coefsU;
     SearchCoefs coefsV;
@@ -307,10 +307,10 @@ int32_t ALACEncoder::EncodeStereo(BitBuffer *bitstream, void *inputBuffer, uint3
     mixBits = kDefaultMixBits;
     maxRes  = kMaxRes;
     numU = numV = kDefaultNumUV;
-    denShift    = DENSHIFT_DEFAULT;
-    mode        = 0;
-    pbFactor    = 4;
-    dilate      = 8;
+    // denShift    = DENSHIFT_DEFAULT;
+    mode     = 0;
+    pbFactor = 4;
+    dilate   = 8;
 
     minBits = minBits1 = minBits2 = 1ul << 31;
 
@@ -520,16 +520,16 @@ Exit:
 */
 int32_t ALACEncoder::EncodeStereoFast(BitBuffer *bitstream, void *inputBuffer, uint32_t stride, uint32_t channelIndex, uint32_t numSamples)
 {
-    BitBuffer   startBits = *bitstream; // squirrel away current bit position in case we decide to use escape hatch
-    AGParamRec  agParams;
-    uint32_t    bits1, bits2;
-    int32_t     mixBits, mixRes;
-    uint32_t    minBits, minBits1, minBits2;
-    uint32_t    numU, numV;
-    uint32_t    mode;
-    uint32_t    pbFactor;
-    uint32_t    chanBits;
-    uint32_t    denShift;
+    BitBuffer  startBits = *bitstream; // squirrel away current bit position in case we decide to use escape hatch
+    AGParamRec agParams;
+    uint32_t   bits1, bits2;
+    int32_t    mixBits, mixRes;
+    uint32_t   minBits, minBits1, minBits2;
+    uint32_t   numU, numV;
+    uint32_t   mode;
+    uint32_t   pbFactor;
+    uint32_t   chanBits;
+    // uint32_t    denShift;
     uint8_t     bytesShifted;
     SearchCoefs coefsU;
     SearchCoefs coefsV;
@@ -569,9 +569,9 @@ int32_t ALACEncoder::EncodeStereoFast(BitBuffer *bitstream, void *inputBuffer, u
     mixBits = kDefaultMixBits;
     mixRes  = kDefaultMixRes;
     numU = numV = kDefaultNumUV;
-    denShift    = DENSHIFT_DEFAULT;
-    mode        = 0;
-    pbFactor    = 4;
+    // denShift    = DENSHIFT_DEFAULT;
+    mode     = 0;
+    pbFactor = 4;
 
     minBits = minBits1 = minBits2 = 1ul << 31;
 
@@ -1154,8 +1154,8 @@ uint32_t ALACEncoder::GetMagicCookieSize(uint32_t inNumChannels) const
 
 void ALACEncoder::GetMagicCookie(void *outCookie, uint32_t *ioSize) const
 {
-    ALACSpecificConfig     theConfig                        = { 0 };
-    ALACAudioChannelLayout theChannelLayout                 = { 0 };
+    ALACSpecificConfig     theConfig                        = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    ALACAudioChannelLayout theChannelLayout                 = { 0, 0, 0 };
     uint8_t                theChannelAtom[kChannelAtomSize] = { 0, 0, 0, 0, 'c', 'h', 'a', 'n', 0, 0, 0, 0 };
     uint32_t               theCookieSize                    = sizeof(ALACSpecificConfig);
     uint8_t               *theCookiePointer                 = (uint8_t *)outCookie;

@@ -247,7 +247,7 @@ static inline void ALWAYS_INLINE dyn_jam_noDeref_large(unsigned char *out, uint3
 }
 
 
-int32_t dyn_comp( AGParamRecPtr params, int32_t * pc, BitBuffer * bitstream, int32_t numSamples, int32_t bitSize, uint32_t * outNumBits )
+int32_t dyn_comp( AGParamRecPtr params, int32_t * pc, BitBuffer * bitstream, uint32_t numSamples, int32_t bitSize, uint32_t * outNumBits )
 {
     unsigned char *		out;
     uint32_t		bitPos, startPos;

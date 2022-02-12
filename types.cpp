@@ -1,7 +1,6 @@
 #include "types.h"
 #include <iostream>
 #include <cstring>
-#include <filesystem>
 
 /************************************************
  * ALACEncoder::Bytes
@@ -178,10 +177,6 @@ bool iequals(const std::string &a, const std::string &b)
  ************************************************/
 FileType determineFileType(const std::string &fileName) noexcept(false)
 {
-    if (!std::filesystem::exists(fileName)) {
-        throw Error(fileName + ": File not found");
-    }
-
     auto file = std::ifstream(fileName);
     if (file.fail()) {
         throw Error(fileName + ": " + strerror(errno));
