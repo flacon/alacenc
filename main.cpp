@@ -36,7 +36,8 @@ Options:
   --compilation            Set track as part of a compilation
   --track=<number/total>   Set track number
   --disc=<number/total>    Set disc number
-  --cover=<file>           Set disc cover from file. The program supports covers in JPEG, PNG and BMP formats.
+  --cover=<file>           Set disc cover from file. The program supports
+                           covers in JPEG, PNG and BMP formats.
 )";
 
 std::tuple<int, int> splitNums(const std::string &s)
