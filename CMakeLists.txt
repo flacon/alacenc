@@ -23,7 +23,7 @@ set(CMAKE_C_FLAGS_RELEASE "-O2 -DNDEBUG ${CMAKE_C_FLAGS_RELEASE}")
 
 
 if (CMAKE_BUILD_TYPE STREQUAL Release)
-  status_message("For building debug version use -DCMAKE_BUILD_TYPE=Debug option.")
+  message("For building debug version use -DCMAKE_BUILD_TYPE=Debug option.")
 endif()
 
 LIST(APPEND SOURCES
