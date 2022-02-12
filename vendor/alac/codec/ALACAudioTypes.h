@@ -169,7 +169,7 @@ typedef struct ALACSpecificConfig
 
 // The AudioChannelLayout atom type is not exposed yet so define it here
 enum {
-    AudioChannelLayoutAID = 'chan'
+    AudioChannelLayoutAID = 'c' << 24 | 'h' << 16 | 'a' << 8 | 'n',
 };
 
 #if PRAGMA_STRUCT_ALIGN

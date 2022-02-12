@@ -45,14 +45,14 @@
 typedef int16_t (*SearchCoefs)[kALACMaxCoefs];
 
 // defines/constants
-const uint32_t kALACEncoderMagic = 'dpge';
-const uint32_t kMaxSampleSize    = 32; // max allowed bit width is 32
-const uint32_t kDefaultMixBits   = 2;
-const uint32_t kDefaultMixRes    = 0;
-const uint32_t kMaxRes           = 4;
-const uint32_t kDefaultNumUV     = 8;
-const uint32_t kMinUV            = 4;
-const uint32_t kMaxUV            = 8;
+// const uint32_t kALACEncoderMagic = 'd' << 24 | 'p' << 16 | 'g' << 8 | 'e';
+const uint32_t kMaxSampleSize  = 32; // max allowed bit width is 32
+const uint32_t kDefaultMixBits = 2;
+const uint32_t kDefaultMixRes  = 0;
+const uint32_t kMaxRes         = 4;
+const uint32_t kDefaultNumUV   = 8;
+const uint32_t kMinUV          = 4;
+const uint32_t kMaxUV          = 8;
 
 // static functions
 #if VERBOSE_DEBUG
@@ -89,9 +89,9 @@ static const uint32_t sChannelMaps[kALACMaxChannels] = {
     (ID_SCE << 21) | (ID_CPE << 15) | (ID_CPE << 9) | (ID_CPE << 3) | (ID_SCE)
 };
 
-static const uint32_t sSupportediPodSampleRates[] = {
-    8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000
-};
+// static const uint32_t sSupportediPodSampleRates[] = {
+//     8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000
+// };
 
 /*
         Constructor
@@ -971,6 +971,7 @@ Exit:
 int32_t ALACEncoder::Encode(AudioFormatDescription theInputFormat, AudioFormatDescription theOutputFormat,
                             unsigned char *theReadBuffer, unsigned char *theWriteBuffer, int32_t *ioNumBytes)
 {
+    (void)theOutputFormat;
     uint32_t  numFrames;
     uint32_t  outputSize;
     BitBuffer bitstream;
@@ -1255,6 +1256,7 @@ Exit:
 */
 void ALACEncoder::GetSourceFormat(const AudioFormatDescription *source, AudioFormatDescription *output)
 {
+    (void)output;
     // default is 16-bit native endian
     // - note: for float input we assume that's coming from one of our decoders (mp3, aac) so it only makes sense
     //		   to encode to 16-bit since the source was lossy in the first place

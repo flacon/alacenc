@@ -35,7 +35,7 @@
 #include "EndianPortable.h"
 
 // constants/data
-const uint32_t kMaxBitDepth = 32; // max allowed bit depth is 32
+// const uint32_t kMaxBitDepth = 32; // max allowed bit depth is 32
 
 // prototypes
 static void Zero16(int16_t *buffer, uint32_t numItems, uint32_t stride);

@@ -3,8 +3,9 @@ cmake_minimum_required(VERSION 3.5)
 project(libalac
     VERSION 0.1.0
     DESCRIPTION "Apple Lossless (ALAC) encoder and decoder library"
-    LANGUAGES C
+    LANGUAGES CXX
 )
+
 
 SET(HEADERS
     codec/EndianPortable.h

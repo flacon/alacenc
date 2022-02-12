@@ -271,30 +271,30 @@ static inline int32_t dyn_get_32bit( uint8_t * in, uint32_t * bitPos, int32_t m,
 
 int32_t dyn_decomp( AGParamRecPtr params, BitBuffer * bitstream, int32_t * pc, int32_t numSamples, int32_t maxSize, uint32_t * outNumBits )
 {
-    uint8_t 		*in;
-    int32_t			*outPtr = pc;
+    uint8_t 	*in;
+    int32_t	*outPtr = pc;
     uint32_t 	bitPos, startPos, maxPos;
-    uint32_t		j, m, k, n, c, mz;
-    int32_t			del, zmode;
+    uint32_t	j, m, k, n, c, mz;
+    int32_t	del, zmode;
     uint32_t 	mb;
     uint32_t	pb_local = params->pb;
     uint32_t	kb_local = params->kb;
     uint32_t	wb_local = params->wb;
     int32_t				status;
 
-	RequireAction( (bitstream != nil) && (pc != nil) && (outNumBits != nil), return kALAC_ParamError; );
-	*outNumBits = 0;
+    RequireAction( (bitstream != nil) && (pc != nil) && (outNumBits != nil), return kALAC_ParamError; );
+    *outNumBits = 0;
 
-	in = bitstream->cur;
-	startPos = bitstream->bitIndex;
-	maxPos = bitstream->byteSize * 8;
-	bitPos = startPos;
+    in = bitstream->cur;
+    startPos = bitstream->bitIndex;
+    maxPos = bitstream->byteSize * 8;
+    bitPos = startPos;
 
     mb = params->mb0;
     zmode = 0;
 
     c = 0;
-	status = ALAC_noErr;
+    status = ALAC_noErr;
 
     while (c < numSamples)
     {

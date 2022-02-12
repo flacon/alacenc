@@ -46,7 +46,7 @@ static constexpr int WAVE64_CHUNK_HEADER_SIZE = 16 + 8;
 
 // static const int READ_DELAY = 1000;
 
-#if 'ABCD' == 0x41424344
+#if ('A' << 24 | 'B' << 16 | 'C' << 8 | 'D') == 0x41424344
 // little-endian target architecture
 
 static inline uint16_t fromLittleEndian(uint16_t value)
@@ -304,7 +304,7 @@ class Guid : public std::array<char, 16>
 public:
     static constexpr int SIZE = 16;
     Guid() :
-        std::array<char, SIZE>({ '\0' }) {}
+        std::array<char, SIZE>({ '\0' }) { }
 
     inline void load(std::istream *stream) { return mustRead(stream, this->data(), this->size()); }
     inline bool operator==(const char *str) const { return strncmp(data(), str, size()) == 0; }
