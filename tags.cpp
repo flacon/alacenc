@@ -31,23 +31,6 @@ void Tags::setBoolTag(const char *tag, bool value)
     mBoolTags[tag] = value;
 }
 
-static int genreIndex(const std::string &str)
-{
-    int res = 0;
-    for (auto s : Tags::GENRES) {
-        if (iequals(s, str)) {
-            return res;
-        }
-        res++;
-    }
-    throw Error(str + ": Unknown genre");
-}
-
-void Tags::setGenre(const std::string &value)
-{
-    mGenre = genreIndex(value);
-}
-
 void Tags::setCoverFile(const std::string &value, FileType type)
 {
     mCoverFile = value;

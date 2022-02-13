@@ -872,10 +872,6 @@ MetaAtom::MetaAtom(const Encoder &encoder)
         addTag(ilst, tag.first, tag.second);
     }
 
-    if (encoder.tags().genreNum()) {
-        addTag(ilst, "gnre", encoder.tags().genreNum());
-    }
-
     if (encoder.tags().trackNum()) {
         ilst.data << TrknAtom(encoder);
     }
