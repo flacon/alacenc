@@ -27,20 +27,29 @@
 #include <stdio.h>
 #include "EndianPortable.h"
 
+// *****************************************
+// Defining the bit order for different architectures
+#if defined(__i386__)
+#define TARGET_RT_LITTLE_ENDIAN 1
+#elif defined(__x86_64__)
+#define TARGET_RT_LITTLE_ENDIAN 1
+#elif defined(__arm64__)
+#define TARGET_RT_LITTLE_ENDIAN 1
+#elif defined (TARGET_OS_WIN32)
+#define TARGET_RT_LITTLE_ENDIAN 1
+#endif
+
+#ifndef TARGET_RT_LITTLE_ENDIAN
+#error TARGET_RT_LITTLE_ENDIAN not defined!
+#endif
+// *****************************************
+
 #define BSWAP16(x) (((x << 8) | ((x >> 8) & 0x00ff)))
 #define BSWAP32(x) (((x << 24) | ((x << 8) & 0x00ff0000) | ((x >> 8) & 0x0000ff00) | ((x >> 24) & 0x000000ff)))
 #define BSWAP64(x) ((((int64_t)x << 56) | (((int64_t)x << 40) & 0x00ff000000000000LL) | \
                     (((int64_t)x << 24) & 0x0000ff0000000000LL) | (((int64_t)x << 8) & 0x000000ff00000000LL) | \
                     (((int64_t)x >> 8) & 0x00000000ff000000LL) | (((int64_t)x >> 24) & 0x0000000000ff0000LL) | \
                     (((int64_t)x >> 40) & 0x000000000000ff00LL) | (((int64_t)x >> 56) & 0x00000000000000ffLL)))
-
-#if defined(__i386__)
-#define TARGET_RT_LITTLE_ENDIAN 1
-#elif defined(__x86_64__)
-#define TARGET_RT_LITTLE_ENDIAN 1
-#elif defined (TARGET_OS_WIN32)
-#define TARGET_RT_LITTLE_ENDIAN 1
-#endif
 
 uint16_t Swap16NtoB(uint16_t inUInt16)
 {
