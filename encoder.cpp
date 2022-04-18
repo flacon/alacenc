@@ -4,7 +4,7 @@
  * Flacon - audio File Encoder
  * https://github.com/flacon/flacon
  *
- * Copyright: 2012-2013
+ * Copyright: 2022
  *   Alexander Sokoloff <sokoloff.a@gmail.com>
  *
  * MIT License
@@ -46,7 +46,9 @@ struct noop
 };
 
 Encoder::Encoder(const Options &options) noexcept(false) :
-    mOptions(options)
+    mOptions(options),
+    mInFormat({}),
+    mOutFormat({})
 {
     if (mOptions.inFile == "-") {
         mInFile.reset(&std::cin, noop());
@@ -144,7 +146,6 @@ void Encoder::writeAudioData(std::istream *in, OutFile &out)
 {
     const int32_t inBufSize = sampleSize();
     mSampleSizeTable.reserve(mWavHeader.dataSize() / inBufSize);
-    const int32_t     outBufSize = inBufSize + kALACMaxEscapeHeaderBytes;
     std::vector<char> inBuf(inBufSize);
 
     std::list<std::vector<unsigned char>> data;
@@ -162,22 +163,20 @@ void Encoder::writeAudioData(std::istream *in, OutFile &out)
         if (mOptions.showProgress) {
             int p = (total - remained) * 100.0 / total;
             if (p > percent) {
-                fprintf(stderr, "%d%%\r", p);
+                fprintf(stderr, "  %d%%\r", p);
                 percent = p;
             }
         }
 
-        int32_t size = std::min(uint64_t(inBufSize), remained);
+        int32_t readed = std::min(uint64_t(inBufSize), remained);
+        in->read(inBuf.data(), readed);
+        remained -= readed;
 
-        in->read(inBuf.data(), size);
-        remained -= size;
+        int32_t size = readed;
 
-        std::vector<unsigned char> outBuf(outBufSize);
-
-        mEncoder.Encode(mInFormat, mOutFormat, (unsigned char *)inBuf.data(), (unsigned char *)outBuf.data(), &size);
-
+        std::vector<unsigned char> &outBuf = data.emplace_back(mEncoder.maxOutputBytes());
+        mEncoder.Encode(mInFormat, mOutFormat, (unsigned char *)inBuf.data(), outBuf.data(), &size);
         outBuf.resize(size);
-        data.push_back(std::move(outBuf));
 
         outDataSize += size;
         mSampleSizeTable.push_back(size);
@@ -187,7 +186,7 @@ void Encoder::writeAudioData(std::istream *in, OutFile &out)
     out << "mdat";
     mAudioDataStartPos = out.tellp();
 
-    for (auto chunk : data) {
+    for (auto &chunk : data) {
         out.write(chunk.data(), chunk.size());
     }
 }

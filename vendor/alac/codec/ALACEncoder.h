@@ -51,6 +51,8 @@ public:
 
     virtual int32_t InitializeEncoder(AudioFormatDescription theOutputFormat);
 
+    uint32_t maxOutputBytes() const { return mMaxOutputBytes; }
+
 protected:
     virtual void GetSourceFormat(const AudioFormatDescription *source, AudioFormatDescription *output);
 
