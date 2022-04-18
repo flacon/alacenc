@@ -201,7 +201,7 @@ FileType determineFileType(const std::string &fileName) noexcept(false)
         return FileType::JPEG;
     }
 
-    if (strncmp(buf, "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A", 4) == 0) {
+    if (strncmp(buf, "\x89\x50\x4E\x47\x0D\x0A\x1A\x0A", 8) == 0) {
         return FileType::PNG;
     }
 
