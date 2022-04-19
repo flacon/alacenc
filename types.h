@@ -89,7 +89,7 @@ public:
     OutFile &operator<<(const Bytes &value);
     OutFile &operator<<(const char value[5]);
 
-    void write(unsigned char *data, std::streamsize size);
+    void write(const unsigned char *data, std::streamsize size);
 
 private:
     std::ofstream mFile;

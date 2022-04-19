@@ -190,7 +190,7 @@ OutFile &OutFile::operator<<(const char value[5])
     return *this;
 }
 
-void OutFile::write(unsigned char *data, std::streamsize size)
+void OutFile::write(const unsigned char *data, std::streamsize size)
 {
     mStream.write((char *)(data), size);
     mPos += size;

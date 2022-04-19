@@ -142,18 +142,68 @@ void Encoder::setTags(const Tags &value)
     mTags = value;
 }
 
+class OutBuffer
+{
+public:
+    OutBuffer()
+    {
+        mData.emplace_back();
+    }
+
+    unsigned char *reserve(size_t size)
+    {
+        Chunk &last = mData.back();
+
+        if ((last.size + size) <= CHUNK_SIZE) {
+            return last.data + last.size;
+        }
+
+        return mData.emplace_back().data;
+    }
+
+    void commit(size_t size)
+    {
+        mData.back().size += size;
+    }
+
+    size_t size() const
+    {
+        size_t res = 0;
+        for (const Chunk &c : mData) {
+            res += c.size;
+        }
+        return res;
+    }
+
+    void write(OutFile &out) const
+    {
+        for (const Chunk &c : mData) {
+            out.write(c.data, c.size);
+        }
+    }
+
+private:
+    static constexpr size_t CHUNK_SIZE = 16 * 1024 * 1024;
+    struct Chunk
+    {
+        unsigned char data[CHUNK_SIZE];
+        size_t        size = 0;
+    };
+
+    std::vector<Chunk> mData;
+};
+
 void Encoder::writeAudioData(std::istream *in, OutFile &out)
 {
     const int32_t inBufSize = sampleSize();
     mSampleSizeTable.reserve(mWavHeader.dataSize() / inBufSize);
     std::vector<char> inBuf(inBufSize);
 
-    std::list<std::vector<unsigned char>> data;
+    OutBuffer data;
 
-    uint32_t outDataSize = 0;
-    uint64_t total       = mWavHeader.dataSize();
-    uint64_t remained    = total;
-    int      percent     = 0;
+    uint64_t total    = mWavHeader.dataSize();
+    uint64_t remained = total;
+    int      percent  = 0;
 
     while (remained > 0) {
         if (!in->good()) {
@@ -174,19 +224,16 @@ void Encoder::writeAudioData(std::istream *in, OutFile &out)
 
         int32_t size = readed;
 
-        std::vector<unsigned char> &outBuf = data.emplace_back(mEncoder.maxOutputBytes());
-        mEncoder.Encode(mInFormat, mOutFormat, (unsigned char *)inBuf.data(), outBuf.data(), &size);
-        outBuf.resize(size);
+        unsigned char *outBuf = data.reserve(mEncoder.maxOutputBytes());
+        mEncoder.Encode(mInFormat, mOutFormat, (unsigned char *)inBuf.data(), outBuf, &size);
+        data.commit(size);
 
-        outDataSize += size;
         mSampleSizeTable.push_back(size);
     }
 
-    out << uint32_t(outDataSize + 8);
+    out << uint32_t(data.size() + 8);
     out << "mdat";
     mAudioDataStartPos = out.tellp();
 
-    for (auto &chunk : data) {
-        out.write(chunk.data(), chunk.size());
-    }
+    data.write(out);
 }
