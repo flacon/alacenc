@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 project(alacenc
-    VERSION 0.2.0
+    VERSION 0.3.0
     DESCRIPTION "command-line ALAC encoder"
     LANGUAGES C CXX
 )
