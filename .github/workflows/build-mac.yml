@@ -1,0 +1,39 @@
+name: Build macOs universal binary
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{github.workspace}}/build
+
+    - name: Run CMake
+      shell: bash
+      working-directory: ${{github.workspace}}/build
+      run: |
+        cmake \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_OSX_DEPLOYMENT_TARGET='10.10.1' \
+          -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" \
+          $GITHUB_WORKSPACE
+
+    - name: Build
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: make -j 8
+
+    - name: Get the project version
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: echo "PROJECT_VERSION=`cmake --system-information | awk -F= '$1~/CMAKE_PROJECT_VERSION:STATIC/{print$2}'`" | tee -a "$GITHUB_ENV"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: alacenc-${{env.PROJECT_VERSION}}-universal-mac
+        path: "${{github.workspace}}/build/alacenc"
