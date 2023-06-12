@@ -39,6 +39,7 @@
 #include <vector>
 #include <fstream>
 #include <array>
+#include <cstdint>
 
 class Error : public std::runtime_error
 {
