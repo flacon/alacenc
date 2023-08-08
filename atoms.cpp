@@ -655,7 +655,7 @@ OutFile &operator<<(OutFile &os, const FreeAtom &atom)
 {
     os << uint32_t(atom.mSize);
     os << "free";
-    for (uint i = 0; i < atom.mSize - 8; ++i) {
+    for (unsigned i = 0; i < atom.mSize - 8; ++i) {
         os << '\0';
     }
     return os;
