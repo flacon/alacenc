@@ -41,6 +41,8 @@
 #define TARGET_RT_LITTLE_ENDIAN 1
 #elif defined (TARGET_OS_WIN32)
 #define TARGET_RT_LITTLE_ENDIAN 1
+#else
+#define TARGET_RT_LITTLE_ENDIAN 0
 #endif
 
 #ifndef TARGET_RT_LITTLE_ENDIAN
