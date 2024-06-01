@@ -46,6 +46,32 @@ LIST(APPEND SOURCES
 )
 
 
+# Defining the bit order for different architectures
+if(CMAKE_VERSION VERSION_LESS "3.20.0")
+    include(TestBigEndian)
+    TEST_BIG_ENDIAN(big_endian)
+    if (${big_endian})
+        set(TARGET_RT_LITTLE_ENDIAN 0)
+    else()
+        set(TARGET_RT_LITTLE_ENDIAN 1)
+    endif()
+else()
+    if (${CMAKE_CXX_BYTE_ORDER} STREQUAL "LITTLE_ENDIAN")
+        set(TARGET_RT_LITTLE_ENDIAN 1)
+    else()
+        set(TARGET_RT_LITTLE_ENDIAN 0)
+    endif()
+endif()
+
+if (${TARGET_RT_LITTLE_ENDIAN})
+    message(STATUS "Use little endian")
+else()
+    message(STATUS "Use big endian")
+endif()
+
+add_definitions(-DTARGET_RT_LITTLE_ENDIAN=${TARGET_RT_LITTLE_ENDIAN})
+# Defining the bit order for different architectures
+
 add_definitions(-DPROJECT_NAME=\"${PROJECT_NAME}\")
 add_definitions(-DPROJECT_VERSION=\"${CMAKE_PROJECT_VERSION}\")
 add_definitions(-DPROJECT_DESCRIPTION=\"${PROJECT_DESCRIPTION}\")

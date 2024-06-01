@@ -28,18 +28,8 @@
 #include "EndianPortable.h"
 
 // *****************************************
-// Defining the bit order for different architectures
-#include <stdint.h>
-
-#if defined(__linux__) || defined(__unix__)
-#include <endian.h>
-#endif
-
-#if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-#define TARGET_RT_LITTLE_ENDIAN 1
-#elif defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-#define TARGET_RT_LITTLE_ENDIAN 0
-#else
+// The TARGET_RT_LITTLE_ENDIAN macro is defined in CMakeList
+#ifndef TARGET_RT_LITTLE_ENDIAN
 #error Cannot determine endianness!
 #endif
 // *****************************************
