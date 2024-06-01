@@ -29,24 +29,18 @@
 
 // *****************************************
 // Defining the bit order for different architectures
-#if defined(__i386__)
-#define TARGET_RT_LITTLE_ENDIAN 1
-#elif defined(__x86_64__)
-#define TARGET_RT_LITTLE_ENDIAN 1
-#elif defined(__arm64__)
-#define TARGET_RT_LITTLE_ENDIAN 1
-#elif defined(__aarch64__)
-#define TARGET_RT_LITTLE_ENDIAN 1
-#elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-#define TARGET_RT_LITTLE_ENDIAN 1
-#elif defined (TARGET_OS_WIN32)
-#define TARGET_RT_LITTLE_ENDIAN 1
-#else
-#define TARGET_RT_LITTLE_ENDIAN 0
+#include <stdint.h>
+
+#if defined(__linux__) || defined(__unix__)
+#include <endian.h>
 #endif
 
-#ifndef TARGET_RT_LITTLE_ENDIAN
-#error TARGET_RT_LITTLE_ENDIAN not defined!
+#if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#define TARGET_RT_LITTLE_ENDIAN 1
+#elif defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#define TARGET_RT_LITTLE_ENDIAN 0
+#else
+#error Cannot determine endianness!
 #endif
 // *****************************************
 
