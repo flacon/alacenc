@@ -33,7 +33,7 @@ jobs:
       run: echo "PROJECT_VERSION=`cmake --system-information | awk -F= '$1~/CMAKE_PROJECT_VERSION:STATIC/{print$2}'`" | tee -a "$GITHUB_ENV"
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: alacenc-${{env.PROJECT_VERSION}}-universal-mac
         path: "${{github.workspace}}/build/alacenc"
