@@ -37,6 +37,8 @@ void BitBufferInit( BitBuffer * bits, uint8_t * buffer, uint32_t byteSize )
 	bits->byteSize	= byteSize;
 }
 
+#define AssertBufferReadBounds(b, n) RequireAction( b->end >= (b->cur + ((b->bitIndex + n) / 8 + ((b->bitIndex + n) % 8 > 0))), return 0; );
+
 // BitBufferRead
 //
 uint32_t BitBufferRead( BitBuffer * bits, uint8_t numBits )
@@ -44,6 +46,8 @@ uint32_t BitBufferRead( BitBuffer * bits, uint8_t numBits )
 	uint32_t		returnBits;
 	
 	//Assert( numBits <= 16 );
+
+	AssertBufferReadBounds(bits, numBits)
 
 	returnBits = ((uint32_t)bits->cur[0] << 16) | ((uint32_t)bits->cur[1] << 8) | ((uint32_t)bits->cur[2]);
 	returnBits = returnBits << bits->bitIndex;
@@ -69,6 +73,8 @@ uint8_t BitBufferReadSmall( BitBuffer * bits, uint8_t numBits )
 	uint16_t		returnBits;
 	
 	//Assert( numBits <= 8 );
+
+	AssertBufferReadBounds(bits, numBits)
 	
 	returnBits = (bits->cur[0] << 8) | bits->cur[1];
 	returnBits = returnBits << bits->bitIndex;
@@ -91,6 +97,8 @@ uint8_t BitBufferReadSmall( BitBuffer * bits, uint8_t numBits )
 uint8_t BitBufferReadOne( BitBuffer * bits )
 {
 	uint8_t		returnBits;
+
+	AssertBufferReadBounds(bits, 8)
 
 	returnBits = (bits->cur[0] >> (7 - bits->bitIndex)) & 1;
 
