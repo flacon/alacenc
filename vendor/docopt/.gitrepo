@@ -6,7 +6,7 @@
 [subrepo]
 	remote = https://github.com/docopt/docopt.cpp.git
 	branch = master
-	commit = 6f5de76970be94a6f1e4556d1716593100e285d2
-	parent = 3cc37d0e8a5ac5a13c90958ed4fcb0a1b6338181
+	commit = 05d507da0d153faff381f44968833ebffdc03447
+	parent = 0696571555bb908c4d52e7e71a639e437460918f
 	method = merge
-	cmdver = 0.4.3
+	cmdver = 0.4.9
