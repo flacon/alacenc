@@ -82,7 +82,7 @@ add_subdirectory(vendor/docopt EXCLUDE_FROM_ALL)
 
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} alac_s docopt_s)
+target_link_libraries(${PROJECT_NAME} alac_s docopt)
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 
